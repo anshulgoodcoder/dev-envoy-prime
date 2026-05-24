@@ -12,8 +12,8 @@ export function AppShell() {
       <div className="flex-1 flex flex-col min-w-0">
         <Header />
         {degraded.length > 0 && (
-          <div className="flex items-center gap-2 border-b bg-warning/10 px-4 py-2 text-xs text-warning-foreground">
-            <AlertTriangle className="h-3.5 w-3.5 text-warning" />
+          <div className="flex items-center gap-2 border-b border-yellow-500/20 bg-yellow-500/10 px-4 py-2 text-sm text-foreground">
+            <AlertTriangle className="h-4 w-4 shrink-0 text-yellow-500" />
             <span>
               <strong className="font-semibold">{degraded.map((d) => d.name).join(", ")}</strong>{" "}
               {degraded.length === 1 ? "is" : "are"} experiencing degraded performance.
