@@ -15,8 +15,11 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as AuthedRouteImport } from './routes/_authed'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthedSandboxRouteImport } from './routes/_authed/sandbox'
 import { Route as AuthedDashboardRouteImport } from './routes/_authed/dashboard'
 import { Route as AuthedCatalogueRouteImport } from './routes/_authed/catalogue'
+import { Route as AuthedDocsIndexRouteImport } from './routes/_authed/docs.index'
+import { Route as AuthedDocsApiIdRouteImport } from './routes/_authed/docs.$apiId'
 
 const SignupRoute = SignupRouteImport.update({
   id: '/signup',
@@ -47,6 +50,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthedSandboxRoute = AuthedSandboxRouteImport.update({
+  id: '/sandbox',
+  path: '/sandbox',
+  getParentRoute: () => AuthedRoute,
+} as any)
 const AuthedDashboardRoute = AuthedDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -55,6 +63,16 @@ const AuthedDashboardRoute = AuthedDashboardRouteImport.update({
 const AuthedCatalogueRoute = AuthedCatalogueRouteImport.update({
   id: '/catalogue',
   path: '/catalogue',
+  getParentRoute: () => AuthedRoute,
+} as any)
+const AuthedDocsIndexRoute = AuthedDocsIndexRouteImport.update({
+  id: '/docs/',
+  path: '/docs/',
+  getParentRoute: () => AuthedRoute,
+} as any)
+const AuthedDocsApiIdRoute = AuthedDocsApiIdRouteImport.update({
+  id: '/docs/$apiId',
+  path: '/docs/$apiId',
   getParentRoute: () => AuthedRoute,
 } as any)
 
@@ -66,6 +84,9 @@ export interface FileRoutesByFullPath {
   '/signup': typeof SignupRoute
   '/catalogue': typeof AuthedCatalogueRoute
   '/dashboard': typeof AuthedDashboardRoute
+  '/sandbox': typeof AuthedSandboxRoute
+  '/docs/$apiId': typeof AuthedDocsApiIdRoute
+  '/docs/': typeof AuthedDocsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -75,6 +96,9 @@ export interface FileRoutesByTo {
   '/signup': typeof SignupRoute
   '/catalogue': typeof AuthedCatalogueRoute
   '/dashboard': typeof AuthedDashboardRoute
+  '/sandbox': typeof AuthedSandboxRoute
+  '/docs/$apiId': typeof AuthedDocsApiIdRoute
+  '/docs': typeof AuthedDocsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -86,6 +110,9 @@ export interface FileRoutesById {
   '/signup': typeof SignupRoute
   '/_authed/catalogue': typeof AuthedCatalogueRoute
   '/_authed/dashboard': typeof AuthedDashboardRoute
+  '/_authed/sandbox': typeof AuthedSandboxRoute
+  '/_authed/docs/$apiId': typeof AuthedDocsApiIdRoute
+  '/_authed/docs/': typeof AuthedDocsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -97,6 +124,9 @@ export interface FileRouteTypes {
     | '/signup'
     | '/catalogue'
     | '/dashboard'
+    | '/sandbox'
+    | '/docs/$apiId'
+    | '/docs/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -106,6 +136,9 @@ export interface FileRouteTypes {
     | '/signup'
     | '/catalogue'
     | '/dashboard'
+    | '/sandbox'
+    | '/docs/$apiId'
+    | '/docs'
   id:
     | '__root__'
     | '/'
@@ -116,6 +149,9 @@ export interface FileRouteTypes {
     | '/signup'
     | '/_authed/catalogue'
     | '/_authed/dashboard'
+    | '/_authed/sandbox'
+    | '/_authed/docs/$apiId'
+    | '/_authed/docs/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -171,6 +207,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authed/sandbox': {
+      id: '/_authed/sandbox'
+      path: '/sandbox'
+      fullPath: '/sandbox'
+      preLoaderRoute: typeof AuthedSandboxRouteImport
+      parentRoute: typeof AuthedRoute
+    }
     '/_authed/dashboard': {
       id: '/_authed/dashboard'
       path: '/dashboard'
@@ -185,17 +228,37 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthedCatalogueRouteImport
       parentRoute: typeof AuthedRoute
     }
+    '/_authed/docs/': {
+      id: '/_authed/docs/'
+      path: '/docs'
+      fullPath: '/docs/'
+      preLoaderRoute: typeof AuthedDocsIndexRouteImport
+      parentRoute: typeof AuthedRoute
+    }
+    '/_authed/docs/$apiId': {
+      id: '/_authed/docs/$apiId'
+      path: '/docs/$apiId'
+      fullPath: '/docs/$apiId'
+      preLoaderRoute: typeof AuthedDocsApiIdRouteImport
+      parentRoute: typeof AuthedRoute
+    }
   }
 }
 
 interface AuthedRouteChildren {
   AuthedCatalogueRoute: typeof AuthedCatalogueRoute
   AuthedDashboardRoute: typeof AuthedDashboardRoute
+  AuthedSandboxRoute: typeof AuthedSandboxRoute
+  AuthedDocsApiIdRoute: typeof AuthedDocsApiIdRoute
+  AuthedDocsIndexRoute: typeof AuthedDocsIndexRoute
 }
 
 const AuthedRouteChildren: AuthedRouteChildren = {
   AuthedCatalogueRoute: AuthedCatalogueRoute,
   AuthedDashboardRoute: AuthedDashboardRoute,
+  AuthedSandboxRoute: AuthedSandboxRoute,
+  AuthedDocsApiIdRoute: AuthedDocsApiIdRoute,
+  AuthedDocsIndexRoute: AuthedDocsIndexRoute,
 }
 
 const AuthedRouteWithChildren =
