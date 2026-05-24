@@ -9,38 +9,161 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SignupRouteImport } from './routes/signup'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
+import { Route as AuthedRouteImport } from './routes/_authed'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthedDashboardRouteImport } from './routes/_authed/dashboard'
+import { Route as AuthedCatalogueRouteImport } from './routes/_authed/catalogue'
 
+const SignupRoute = SignupRouteImport.update({
+  id: '/signup',
+  path: '/signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
+  id: '/forgot-password',
+  path: '/forgot-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthedRoute = AuthedRouteImport.update({
+  id: '/_authed',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthedDashboardRoute = AuthedDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AuthedRoute,
+} as any)
+const AuthedCatalogueRoute = AuthedCatalogueRouteImport.update({
+  id: '/catalogue',
+  path: '/catalogue',
+  getParentRoute: () => AuthedRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/forgot-password': typeof ForgotPasswordRoute
+  '/login': typeof LoginRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/signup': typeof SignupRoute
+  '/catalogue': typeof AuthedCatalogueRoute
+  '/dashboard': typeof AuthedDashboardRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/forgot-password': typeof ForgotPasswordRoute
+  '/login': typeof LoginRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/signup': typeof SignupRoute
+  '/catalogue': typeof AuthedCatalogueRoute
+  '/dashboard': typeof AuthedDashboardRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authed': typeof AuthedRouteWithChildren
+  '/forgot-password': typeof ForgotPasswordRoute
+  '/login': typeof LoginRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/signup': typeof SignupRoute
+  '/_authed/catalogue': typeof AuthedCatalogueRoute
+  '/_authed/dashboard': typeof AuthedDashboardRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/forgot-password'
+    | '/login'
+    | '/reset-password'
+    | '/signup'
+    | '/catalogue'
+    | '/dashboard'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/forgot-password'
+    | '/login'
+    | '/reset-password'
+    | '/signup'
+    | '/catalogue'
+    | '/dashboard'
+  id:
+    | '__root__'
+    | '/'
+    | '/_authed'
+    | '/forgot-password'
+    | '/login'
+    | '/reset-password'
+    | '/signup'
+    | '/_authed/catalogue'
+    | '/_authed/dashboard'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthedRoute: typeof AuthedRouteWithChildren
+  ForgotPasswordRoute: typeof ForgotPasswordRoute
+  LoginRoute: typeof LoginRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
+  SignupRoute: typeof SignupRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/signup': {
+      id: '/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof SignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/forgot-password': {
+      id: '/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/forgot-password'
+      preLoaderRoute: typeof ForgotPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authed': {
+      id: '/_authed'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,12 +171,54 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authed/dashboard': {
+      id: '/_authed/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof AuthedDashboardRouteImport
+      parentRoute: typeof AuthedRoute
+    }
+    '/_authed/catalogue': {
+      id: '/_authed/catalogue'
+      path: '/catalogue'
+      fullPath: '/catalogue'
+      preLoaderRoute: typeof AuthedCatalogueRouteImport
+      parentRoute: typeof AuthedRoute
+    }
   }
 }
 
+interface AuthedRouteChildren {
+  AuthedCatalogueRoute: typeof AuthedCatalogueRoute
+  AuthedDashboardRoute: typeof AuthedDashboardRoute
+}
+
+const AuthedRouteChildren: AuthedRouteChildren = {
+  AuthedCatalogueRoute: AuthedCatalogueRoute,
+  AuthedDashboardRoute: AuthedDashboardRoute,
+}
+
+const AuthedRouteWithChildren =
+  AuthedRoute._addFileChildren(AuthedRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthedRoute: AuthedRouteWithChildren,
+  ForgotPasswordRoute: ForgotPasswordRoute,
+  LoginRoute: LoginRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
+  SignupRoute: SignupRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
