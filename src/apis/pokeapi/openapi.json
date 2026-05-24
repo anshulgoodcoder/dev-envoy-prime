@@ -1,0 +1,81 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "PokéAPI",
+    "version": "2.0.0",
+    "description": "The RESTful Pokémon API. Free, no authentication required, perfect for trying out the sandbox."
+  },
+  "servers": [{ "url": "https://pokeapi.co/api/v2", "description": "Public sandbox" }],
+  "tags": [
+    { "name": "Pokemon", "description": "Pokémon species and individual entries" },
+    { "name": "Types", "description": "Elemental types" },
+    { "name": "Berries", "description": "Berry index" },
+    { "name": "Abilities", "description": "Pokémon abilities" }
+  ],
+  "paths": {
+    "/pokemon": {
+      "get": {
+        "tags": ["Pokemon"],
+        "summary": "List Pokémon",
+        "description": "Returns a paginated list of Pokémon.",
+        "operationId": "listPokemon",
+        "parameters": [
+          { "name": "limit", "in": "query", "required": false, "description": "Page size (1-100).", "schema": { "type": "integer", "example": 20 } },
+          { "name": "offset", "in": "query", "required": false, "description": "Result offset.", "schema": { "type": "integer", "example": 0 } }
+        ],
+        "responses": {
+          "200": { "description": "A page of Pokémon results", "content": { "application/json": { "example": { "count": 1302, "next": "...", "previous": null, "results": [{ "name": "bulbasaur", "url": "https://pokeapi.co/api/v2/pokemon/1/" }] } } } }
+        }
+      }
+    },
+    "/pokemon/{idOrName}": {
+      "get": {
+        "tags": ["Pokemon"],
+        "summary": "Get a Pokémon",
+        "description": "Returns the full record for a Pokémon by id or name.",
+        "operationId": "getPokemon",
+        "parameters": [
+          { "name": "idOrName", "in": "path", "required": true, "description": "Numeric id or slug name (e.g. `pikachu`).", "schema": { "type": "string", "example": "pikachu" } }
+        ],
+        "responses": {
+          "200": { "description": "A Pokémon resource", "content": { "application/json": { "example": { "id": 25, "name": "pikachu", "height": 4, "weight": 60, "types": [{ "slot": 1, "type": { "name": "electric" } }] } } } },
+          "404": { "description": "Not found" }
+        }
+      }
+    },
+    "/type/{idOrName}": {
+      "get": {
+        "tags": ["Types"],
+        "summary": "Get a Type",
+        "description": "Returns damage relations and Pokémon for a type.",
+        "operationId": "getType",
+        "parameters": [
+          { "name": "idOrName", "in": "path", "required": true, "description": "Type id or name.", "schema": { "type": "string", "example": "electric" } }
+        ],
+        "responses": { "200": { "description": "A type resource" } }
+      }
+    },
+    "/berry": {
+      "get": {
+        "tags": ["Berries"],
+        "summary": "List berries",
+        "operationId": "listBerries",
+        "parameters": [
+          { "name": "limit", "in": "query", "schema": { "type": "integer", "example": 20 } }
+        ],
+        "responses": { "200": { "description": "Berry index" } }
+      }
+    },
+    "/ability/{idOrName}": {
+      "get": {
+        "tags": ["Abilities"],
+        "summary": "Get an ability",
+        "operationId": "getAbility",
+        "parameters": [
+          { "name": "idOrName", "in": "path", "required": true, "schema": { "type": "string", "example": "static" } }
+        ],
+        "responses": { "200": { "description": "Ability resource" } }
+      }
+    }
+  }
+}

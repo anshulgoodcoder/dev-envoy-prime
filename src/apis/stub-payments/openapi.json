@@ -1,0 +1,82 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Payments API",
+    "version": "0.4.1",
+    "description": "Demonstration payments API. Illustrates how a second API plugs into the portal with no UI changes."
+  },
+  "servers": [{ "url": "https://api.example.com/v1", "description": "Stub — not callable" }],
+  "tags": [
+    { "name": "Charges", "description": "One-off payment captures" },
+    { "name": "Customers", "description": "Customer records" }
+  ],
+  "paths": {
+    "/charges": {
+      "get": {
+        "tags": ["Charges"],
+        "summary": "List charges",
+        "operationId": "listCharges",
+        "parameters": [
+          { "name": "limit", "in": "query", "schema": { "type": "integer", "example": 10 } }
+        ],
+        "responses": { "200": { "description": "Page of charges" } }
+      },
+      "post": {
+        "tags": ["Charges"],
+        "summary": "Create a charge",
+        "operationId": "createCharge",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "example": { "amount": 2999, "currency": "usd", "source": "tok_visa", "description": "Pro plan" }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Charge created" },
+          "400": { "description": "Validation failed" }
+        }
+      }
+    },
+    "/charges/{id}": {
+      "get": {
+        "tags": ["Charges"],
+        "summary": "Retrieve a charge",
+        "operationId": "getCharge",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string", "example": "ch_3Nf..." } }
+        ],
+        "responses": { "200": { "description": "Charge" }, "404": { "description": "Not found" } }
+      },
+      "patch": {
+        "tags": ["Charges"],
+        "summary": "Update charge metadata",
+        "operationId": "updateCharge",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string", "example": "ch_3Nf..." } }
+        ],
+        "requestBody": { "content": { "application/json": { "example": { "description": "Pro plan — annual" } } } },
+        "responses": { "200": { "description": "Updated" } }
+      },
+      "delete": {
+        "tags": ["Charges"],
+        "summary": "Refund a charge",
+        "operationId": "refundCharge",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string", "example": "ch_3Nf..." } }
+        ],
+        "responses": { "200": { "description": "Refunded" } }
+      }
+    },
+    "/customers": {
+      "put": {
+        "tags": ["Customers"],
+        "summary": "Upsert a customer",
+        "operationId": "upsertCustomer",
+        "requestBody": { "content": { "application/json": { "example": { "id": "cus_123", "email": "ada@example.com" } } } },
+        "responses": { "200": { "description": "Customer" } }
+      }
+    }
+  }
+}
