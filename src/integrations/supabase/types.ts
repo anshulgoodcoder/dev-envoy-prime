@@ -14,7 +14,81 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      api_keys: {
+        Row: {
+          created_at: string
+          environment: Database["public"]["Enums"]["api_environment"]
+          expires_at: string | null
+          id: string
+          key_hash: string
+          key_prefix: string
+          last_used_at: string | null
+          name: string
+          revoked_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          environment?: Database["public"]["Enums"]["api_environment"]
+          expires_at?: string | null
+          id?: string
+          key_hash: string
+          key_prefix: string
+          last_used_at?: string | null
+          name: string
+          revoked_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          environment?: Database["public"]["Enums"]["api_environment"]
+          expires_at?: string | null
+          id?: string
+          key_hash?: string
+          key_prefix?: string
+          last_used_at?: string | null
+          name?: string
+          revoked_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      request_history: {
+        Row: {
+          api_id: string
+          created_at: string
+          id: string
+          latency_ms: number | null
+          method: string
+          path: string
+          request: Json | null
+          status: number | null
+          user_id: string
+        }
+        Insert: {
+          api_id: string
+          created_at?: string
+          id?: string
+          latency_ms?: number | null
+          method: string
+          path: string
+          request?: Json | null
+          status?: number | null
+          user_id: string
+        }
+        Update: {
+          api_id?: string
+          created_at?: string
+          id?: string
+          latency_ms?: number | null
+          method?: string
+          path?: string
+          request?: Json | null
+          status?: number | null
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -23,7 +97,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      api_environment: "sandbox" | "staging" | "production"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +224,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      api_environment: ["sandbox", "staging", "production"],
+    },
   },
 } as const
